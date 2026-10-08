@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Prime – Vibe Coding & IA</title>
+  <style>
+    :root {
+      --bg: #f7f5f2;
+      --surface: #ffffff;
+      --text: #1f1d1a;
+      --muted: #6b665e;
+      --accent: #c96442;
+      --border: #e6e1d9;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1917;
+        --surface: #24221f;
+        --text: #f1ede6;
+        --muted: #a39d93;
+        --accent: #e08a68;
+        --border: #3a3733;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .container { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+    header { padding: 72px 0 48px; text-align: center; }
+    header h1 { font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: -0.02em; }
+    header h1 span { color: var(--accent); }
+    header p { margin-top: 12px; color: var(--muted); font-size: 1.15rem; }
+    section { margin-bottom: 48px; }
+    h2 { font-size: 1.4rem; margin-bottom: 16px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 0.95rem; }
+    .cta {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 10px 20px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <h1>Claude <span>Prime</span></h1>
+    <p>Le dépôt Git du cours sur le Vibe Coding et l'Intelligence Artificielle</p>
+    <a class="cta" href="https://github.com/gregfour94/claude-prime">Voir le dépôt sur GitHub</a>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2>À propos du cours</h2>
+      <p>
+        Ce cours explore une nouvelle façon de programmer : le <strong>vibe coding</strong>,
+        où l'on décrit ce que l'on veut en langage naturel et où l'IA nous aide à écrire,
+        comprendre et améliorer le code.
+      </p>
+    </section>
+
+    <section>
+      <h2>Au programme</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Les bases de l'IA</h3>
+          <p>Comprendre les modèles de langage, leurs forces et leurs limites.</p>
+        </div>
+        <div class="card">
+          <h3>Le Vibe Coding</h3>
+          <p>Collaborer avec un assistant IA pour construire des projets rapidement.</p>
+        </div>
+        <div class="card">
+          <h3>Git &amp; GitHub</h3>
+          <p>Versionner son travail, créer des branches et partager son code.</p>
+        </div>
+        <div class="card">
+          <h3>Projets pratiques</h3>
+          <p>Mettre en pratique avec des pages web et de petites applications.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">Claude Prime · Cours Vibe Coding &amp; IA</div>
+  </footer>
+</body>
+</html>
