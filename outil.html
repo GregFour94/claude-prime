@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outil – Claude Prime</title>
+  <title>Boîte à outils – Claude Prime</title>
   <style>
     :root {
       --bg: #f7f5f2;
@@ -12,6 +12,7 @@
       --muted: #6b665e;
       --accent: #c96442;
       --border: #e6e1d9;
+      --chip: #efeae3;
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -21,6 +22,7 @@
         --muted: #a39d93;
         --accent: #e08a68;
         --border: #3a3733;
+        --chip: #2e2b28;
       }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,53 +32,297 @@
       color: var(--text);
       line-height: 1.6;
     }
-    .container { max-width: 880px; margin: 0 auto; padding: 0 16px; }
-    header { padding: 72px 0 48px; text-align: center; }
-    header h1 { font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: -0.02em; }
+    a { color: var(--accent); }
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+    header { padding: 56px 0 32px; text-align: center; }
+    header h1 { font-size: clamp(2rem, 6vw, 3rem); letter-spacing: -0.02em; }
     header h1 span { color: var(--accent); }
-    header p { margin-top: 12px; color: var(--muted); font-size: 1.15rem; }
+    header p { margin: 12px auto 0; color: var(--muted); font-size: 1.1rem; max-width: 640px; }
+    .back { display: inline-block; margin-top: 16px; font-weight: 600; text-decoration: none; }
     section { margin-bottom: 48px; }
-    .card {
+    h2 { font-size: 1.4rem; margin-bottom: 16px; }
+
+    .steps { list-style: none; counter-reset: step; display: grid; gap: 12px; }
+    .steps li {
+      counter-increment: step;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
-      text-align: center;
+      padding: 14px 16px 14px 56px;
+      position: relative;
     }
-    .card p { color: var(--muted); }
-    .back {
-      display: inline-block;
-      margin-top: 24px;
-      color: var(--accent);
-      font-weight: 600;
-      text-decoration: none;
+    .steps li::before {
+      content: counter(step);
+      position: absolute; left: 16px; top: 14px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      display: grid; place-items: center; font-weight: 700; font-size: 0.9rem;
     }
+
+    .toolbar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+    .search {
+      width: 100%; padding: 12px 14px; font-size: 1rem;
+      border: 1px solid var(--border); border-radius: 10px;
+      background: var(--surface); color: var(--text);
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      border: 1px solid var(--border); background: var(--chip); color: var(--text);
+      border-radius: 999px; padding: 6px 14px; font-size: 0.9rem; cursor: pointer;
+    }
+    .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .count { color: var(--muted); font-size: 0.9rem; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .card h3 { font-size: 1.05rem; }
+    .card h3 a { color: var(--text); text-decoration: none; }
+    .card h3 a:hover { color: var(--accent); }
+    .card p { color: var(--muted); font-size: 0.93rem; flex: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: var(--chip); color: var(--muted); }
+    .empty { color: var(--muted); text-align: center; padding: 32px 0; }
+
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 12px; overflow: hidden; }
+    th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+
+    .sources { color: var(--muted); font-size: 0.9rem; }
     footer {
-      border-top: 1px solid var(--border);
-      padding: 24px 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.9rem;
+      border-top: 1px solid var(--border); padding: 24px 0;
+      text-align: center; color: var(--muted); font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
   <header class="container">
-    <h1>L'<span>outil</span></h1>
-    <p>Un espace pour construire notre outil, prêt à être déployé sur Cloudflare.</p>
+    <h1>La boîte à outils du <span>vibe coder</span></h1>
+    <p>Les outils pour coder avec l'IA et les ressources de design pour rendre tes projets beaux, réunis au même endroit.</p>
+    <a class="back" href="index.html">← Retour à l'accueil</a>
   </header>
 
   <main class="container">
     <section>
-      <div class="card">
-        <p>L'outil arrive bientôt ici.</p>
-        <a class="back" href="index.html">← Retour à l'accueil</a>
+      <h2>Commencer ici</h2>
+      <ol class="steps">
+        <li>Choisis un petit projet que tu sais expliquer, par exemple une liste de tâches.</li>
+        <li>Prends un <strong>assistant de code</strong> ou un <strong>outil de prototypage</strong> ci-dessous. Vérifie les conditions d'accès : un outil gratuit demande parfois un abonnement ou une clé API.</li>
+        <li>Va chercher de l'inspiration dans les <strong>galeries de design</strong> et donne des exemples concrets à ton agent.</li>
+        <li>Écris un objectif court et des critères d'acceptation. Construis une petite étape, relis les changements, teste, puis sauvegarde avec Git.</li>
+        <li>Teste et relis avant de partager. Garde tes mots de passe et clés hors des prompts et des commits.</li>
+        <li>Déploie seulement après avoir vérifié les contraintes d'hébergement, surtout si ton projet a besoin d'un backend.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Trouver un outil</h2>
+      <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Rechercher un outil (ex. : animation, MCP, React…)" aria-label="Rechercher un outil">
+        <div class="chips" id="chips"></div>
+        <div class="count" id="count"></div>
       </div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section>
+      <h2>Méthodes de travail</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tâche</th><th>Étapes</th></tr></thead>
+          <tbody>
+            <tr><td>Nouvelle fonctionnalité</td><td>Objectif et critères d'acceptation → inspecter le contexte → petite implémentation → revue et tests</td></tr>
+            <tr><td>Refactoring</td><td>Capturer le comportement actuel → identifier un petit changement → comparer le comportement → répéter</td></tr>
+            <tr><td>Correction de bug</td><td>Reproduire → formuler une hypothèse → ajouter un test de régression → corriger et vérifier</td></tr>
+            <tr><td>Tests</td><td>Identifier les comportements critiques → choisir des vérifications utiles → exécuter et analyser les échecs</td></tr>
+            <tr><td>Design d'interface</td><td>Collecter des références (galeries) → choisir un style → assembler des composants existants → ajouter les animations en dernier</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="sources">
+      <h2>Sources</h2>
+      <p>
+        Outils de code et d'apprentissage : <a href="https://github.com/Scap-Mehdi/awesome-vibecoding">awesome-vibecoding</a> (domaine public, CC0).
+        Ressources de design et d'interface : liste « 25 vibe coding resources » du cours Vibe Coding.
+      </p>
     </section>
   </main>
 
   <footer>
     <div class="container">Claude Prime · Cours Vibe Coding &amp; IA</div>
   </footer>
+
+  <script>
+    const CATEGORIES = {
+      code: 'Code et édition',
+      apps: 'Prototypage d\'applications',
+      context: 'Contexte et intégrations',
+      quality: 'Tests et sécurité',
+      delivery: 'Déploiement',
+      operations: 'Espaces de travail',
+      inspiration: 'Inspiration design',
+      ui: 'Composants UI',
+      motion: 'Animations et effets',
+      learning: 'Apprendre'
+    };
+
+    // [nom, url, description, catégorie, type]
+    const TOOLS = [
+      ['Aider', 'https://github.com/Aider-AI/aider', 'Pair programming en terminal avec des modèles cloud ou locaux et une intégration Git.', 'code', 'CLI'],
+      ['Claude Code', 'https://code.claude.com/docs/en/overview', 'Assistant de code agentique en terminal et par projet.', 'code', 'CLI'],
+      ['Cline', 'https://github.com/cline/cline', 'Agent de code pour IDE, terminal et desktop, avec outils fichiers, commandes et navigateur.', 'code', 'IDE'],
+      ['Cursor', 'https://www.cursor.com/', 'Éditeur et agent de code pour implémenter, déboguer et relire.', 'code', 'IDE'],
+      ['Gemini CLI', 'https://github.com/google-gemini/gemini-cli', 'Agent de code open source en terminal (clé API ou Vertex).', 'code', 'CLI'],
+      ['GitHub Copilot', 'https://github.com/features/copilot', 'Assistance au code et agents dans GitHub et les IDE.', 'code', 'IDE'],
+      ['Goose', 'https://github.com/aaif-goose/goose', 'Agent local extensible avec interfaces desktop et CLI, et outils MCP.', 'code', 'CLI'],
+      ['Kiro', 'https://kiro.dev', 'Agent de code AWS avec spécifications et tests.', 'code', 'IDE'],
+      ['OpenAI Codex CLI', 'https://openai.com/codex/', 'Agent de code OpenAI qui tourne en local dans le terminal.', 'code', 'CLI'],
+      ['Pi', 'https://github.com/earendil-works/pi', 'Agent de code en terminal, extensible, sous licence MIT.', 'code', 'CLI'],
+
+      ['Bolt.new', 'https://bolt.new/', 'Créer des applications en langage naturel, par StackBlitz.', 'apps', 'Web'],
+      ['Dyad', 'https://github.com/dyad-sh/dyad', 'Créer des applications en local avec le modèle de ton choix.', 'apps', 'Desktop'],
+      ['Lovable', 'https://lovable.dev/', 'Générer des applications full-stack avec Supabase.', 'apps', 'Web'],
+      ['Onlook', 'https://www.onlook.com/', 'Modifier visuellement une interface tout en travaillant sur le code.', 'apps', 'Web'],
+      ['Replit', 'https://replit.com/', 'Créer et faire évoluer des applications avec Replit Agent.', 'apps', 'Web'],
+      ['v0', 'https://v0.app/', 'L\'IA de Vercel pour générer des interfaces et du React.', 'apps', 'Web'],
+
+      ['Caliber', 'https://github.com/caliber-ai-org/ai-setup', 'Génère et synchronise les configurations d\'agents (Claude Code, Cursor, Codex).', 'context', 'CLI'],
+      ['Context7', 'https://github.com/upstash/context7', 'Donne la documentation à jour des bibliothèques à ton agent.', 'context', 'MCP'],
+      ['Filesystem MCP', 'https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem', 'Accès contrôlé aux fichiers du projet pour les agents.', 'context', 'MCP'],
+      ['GitHub MCP', 'https://github.com/github/github-mcp-server', 'Connecte dépôts, issues et pull requests à ton agent.', 'context', 'MCP'],
+      ['Neon', 'https://github.com/neondatabase/mcp-server-neon', 'Connecte ton agent aux bases de données Neon.', 'context', 'MCP'],
+      ['Notion MCP', 'https://developers.notion.com/guides/mcp/overview', 'Chercher, lire et mettre à jour du contenu Notion.', 'context', 'MCP'],
+      ['OpenSpec', 'https://github.com/Fission-AI/OpenSpec', 'Développement piloté par les spécifications pour assistants IA.', 'context', 'CLI'],
+      ['Supabase MCP', 'https://github.com/supabase/mcp', 'Schémas, requêtes et configuration de projets Supabase.', 'context', 'MCP'],
+      ['DESIGN.md', '', 'Des design systems écrits en Markdown que ton agent peut lire.', 'context', 'Markdown'],
+
+      ['Agent QA', 'https://github.com/vostride/agent-qa', 'Écrire et lancer des tests web et mobile en langage naturel.', 'quality', 'MCP'],
+      ['Playwright MCP', 'https://github.com/microsoft/playwright-mcp', 'Automatisation officielle du navigateur par Microsoft.', 'quality', 'MCP'],
+      ['PR-Agent', 'https://github.com/The-PR-Agent/pr-agent', 'Relecteur de pull requests maintenu par la communauté.', 'quality', 'CLI'],
+      ['Prbl', 'https://getprbl.com', 'Trouve les failles fréquentes du code généré par IA. Scan gratuit.', 'quality', 'Web'],
+      ['Qodo', 'https://www.qodo.ai', 'Revue de code par IA (anciennement CodiumAI).', 'quality', 'Web'],
+      ['Semgrep MCP', 'https://github.com/semgrep/semgrep/tree/develop/cli/src/semgrep/mcp', 'Analyse de sécurité du code via Semgrep.', 'quality', 'MCP'],
+      ['Sentry', 'https://github.com/getsentry/sentry-mcp', 'Inspecter les erreurs d\'une application et diagnostiquer les échecs.', 'quality', 'MCP'],
+
+      ['Cloudflare', 'https://github.com/cloudflare/mcp-server-cloudflare', 'Gérer le déploiement d\'applications et les ressources cloud.', 'delivery', 'MCP'],
+      ['E2B', 'https://github.com/e2b-dev/E2B', 'Sandbox cloud sécurisée pour agents IA.', 'delivery', 'Cloud'],
+      ['Publish.my', 'https://publish.my/', 'Publier des sites statiques depuis un agent.', 'delivery', 'Web'],
+      ['XcodeBuildMCP', 'https://github.com/getsentry/XcodeBuildMCP', 'Compiler, lancer et déboguer des projets Apple.', 'delivery', 'MCP'],
+
+      ['Delta (Zed)', 'https://delta.dev/', 'Espace de travail multijoueur pour agents de code, avec revue par fils.', 'operations', 'Desktop'],
+      ['Duckweed', 'https://github.com/MusicMaster4/Duckweed', 'Agents, shells et diffs Git dans un espace de travail local.', 'operations', 'Desktop'],
+      ['llm.log', 'https://github.com/lanesket/llm.log', 'Voir les coûts, tokens et requêtes des modèles via un proxy local.', 'operations', 'CLI'],
+      ['Parallel Code', 'https://github.com/johannesjo/parallel-code', 'Agents en parallèle dans des worktrees Git isolés.', 'operations', 'Desktop'],
+      ['Shep', 'https://github.com/shep-ai/shep', 'Orchestrer des agents en parallèle jusqu\'aux brouillons de PR.', 'operations', 'CLI'],
+      ['Superagent', 'https://github.com/pungme/superagent-desktop', 'Claude Code ou Codex dans un espace de travail macOS.', 'operations', 'Desktop'],
+      ['usage', 'https://github.com/aqua5230/usage', 'Voir les quotas de tes agents de code depuis la barre de menu.', 'operations', 'Desktop'],
+      ['Warp Terminal', 'https://www.warp.dev/terminal', 'Terminal pensé pour travailler avec des agents.', 'operations', 'Desktop'],
+
+      ['Minimal Gallery', 'https://minimal.gallery', 'Sites haut de gamme sélectionnés pour nourrir ton agent.', 'inspiration', 'Galerie'],
+      ['Godly', 'https://godly.website', 'Sites choisis à la main pour la qualité de leur design.', 'inspiration', 'Galerie'],
+      ['Refero Styles', 'https://styles.refero.design', 'Plus de 2 000 styles de vrais produits, avec typographie.', 'inspiration', 'Galerie'],
+      ['Component Gallery', 'https://component.gallery', 'Plus de 3 000 exemples : comment les grands design systems résolvent le même élément.', 'inspiration', 'Galerie'],
+      ['Mobbin', 'https://mobbin.com', 'Les parcours d\'applications réelles, écran par écran.', 'inspiration', 'Galerie'],
+      ['Awwwards', 'https://www.awwwards.com', 'Les sites qui ont vraiment gagné des prix.', 'inspiration', 'Galerie'],
+
+      ['shadcn/ui', 'https://ui.shadcn.com', 'Toujours la référence pour une UI propre et réutilisable.', 'ui', 'React'],
+      ['21st.dev', 'https://21st.dev', 'Registre de composants qui se branche à ton agent via MCP.', 'ui', 'MCP'],
+      ['Aceternity UI', 'https://ui.aceternity.com', 'Plus de 200 composants React/Tailwind animés.', 'ui', 'React'],
+      ['Magic UI', 'https://magicui.design', 'Composants soignés pour les applications web modernes.', 'ui', 'React'],
+      ['Uiverse', 'https://uiverse.io', 'Éléments d\'interface créés par la communauté.', 'ui', 'CSS'],
+      ['Shadcn Blocks', 'https://www.shadcnblocks.com', 'Des sections complètes, pas seulement des boutons.', 'ui', 'React'],
+      ['mapcn', 'https://mapcn.dev', 'Composants de cartes : marqueurs, itinéraires, popups.', 'ui', 'React'],
+      ['3D Icons', 'https://3dicons.co', 'Bibliothèque d\'icônes 3D gratuites pour les interfaces modernes.', 'ui', 'Icônes'],
+
+      ['Motion Primitives', 'https://motion-primitives.com', 'Composants d\'animation et d\'interaction prêts à l\'emploi.', 'motion', 'React'],
+      ['Gradient Buttons', 'https://gradientbuttons.colorion.co', 'Styles et effets de boutons en dégradé.', 'motion', 'CSS'],
+      ['Shadertoy', 'https://www.shadertoy.com', 'Des shaders à étudier et à remixer.', 'motion', 'WebGL'],
+      ['Anime.js', 'https://animejs.com', 'Bibliothèque JavaScript légère pour animer le web.', 'motion', 'JS'],
+      ['Liquid Glass', '', 'Composants et effets de verre avec réfraction.', 'motion', 'CSS'],
+      ['CSS Text Effects', '', 'Animations et effets de texte créatifs en CSS.', 'motion', 'CSS'],
+
+      ['Vibe Coding with Confidence', 'https://zalt.me/guides/vibe-coding', 'Manuel avec chapitres d\'introduction gratuits (en anglais).', 'learning', 'Guide'],
+      ['Agentic Coding (Armin Ronacher)', 'https://lucumr.pocoo.org/2025/6/12/agentic-coding/', 'Conseils pratiques pour travailler avec des agents et tester.', 'learning', 'Guide'],
+      ['Simon Willison : LLMs pour coder', 'https://simonwillison.net/2025/Mar/11/using-llms-for-code/', 'Pratiques itératives de code et de vérification.', 'learning', 'Guide'],
+      ['Secure Vibe Coding Guide (CSA)', 'https://cloudsecurityalliance.org/blog/2025/04/09/secure-vibe-coding-guide', 'Checklist sécurité : secrets, autorisations, validation, revue.', 'learning', 'Guide'],
+      ['Context Engineering Intro', 'https://github.com/coleam00/context-engineering-intro', 'Exemples de contexte et d\'instructions pour agents de code.', 'learning', 'Guide'],
+      ['Model Context Protocol', 'https://modelcontextprotocol.io/', 'Introduction officielle à MCP, qui connecte les agents aux outils.', 'learning', 'Guide'],
+      ['VDLC (Roboco)', 'https://vdlc.roboco.io/', 'Cycle de vie du vibe coding en six étapes, avec validation humaine.', 'learning', 'Guide']
+    ];
+
+    const grid = document.getElementById('grid');
+    const chips = document.getElementById('chips');
+    const count = document.getElementById('count');
+    const search = document.getElementById('search');
+    let active = 'all';
+
+    function makeChip(key, label) {
+      const b = document.createElement('button');
+      b.className = 'chip';
+      b.textContent = label;
+      b.setAttribute('aria-pressed', key === active);
+      b.addEventListener('click', () => {
+        active = key;
+        chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b));
+        render();
+      });
+      chips.appendChild(b);
+    }
+
+    function normalize(s) {
+      return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    }
+
+    function render() {
+      const q = normalize(search.value.trim());
+      const list = TOOLS.filter(([name, , desc, cat, type]) =>
+        (active === 'all' || cat === active) &&
+        (!q || normalize([name, desc, type, CATEGORIES[cat]].join(' ')).includes(q))
+      );
+      grid.replaceChildren();
+      list.forEach(([name, url, desc, cat, type]) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        const h = document.createElement('h3');
+        if (url) {
+          const a = document.createElement('a');
+          a.href = url; a.target = '_blank'; a.rel = 'noopener';
+          a.textContent = name + ' ↗';
+          h.appendChild(a);
+        } else {
+          h.textContent = name;
+        }
+        const p = document.createElement('p');
+        p.textContent = desc;
+        const tags = document.createElement('div');
+        tags.className = 'tags';
+        [CATEGORIES[cat], type].forEach(t => {
+          const s = document.createElement('span');
+          s.className = 'tag'; s.textContent = t;
+          tags.appendChild(s);
+        });
+        card.append(h, p, tags);
+        grid.appendChild(card);
+      });
+      count.textContent = list.length + (list.length > 1 ? ' outils' : ' outil');
+      if (!list.length) {
+        const e = document.createElement('p');
+        e.className = 'empty';
+        e.textContent = 'Aucun outil ne correspond à ta recherche.';
+        grid.appendChild(e);
+      }
+    }
+
+    makeChip('all', 'Tous');
+    Object.entries(CATEGORIES).forEach(([k, v]) => makeChip(k, v));
+    search.addEventListener('input', render);
+    render();
+  </script>
 </body>
 </html>
