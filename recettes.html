@@ -3,135 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mes recettes – Claude Prime</title>
-  <style>
-    :root {
-      --bg: #f7f5f2;
-      --surface: #ffffff;
-      --text: #1f1d1a;
-      --muted: #6b665e;
-      --accent: #c96442;
-      --border: #e6e1d9;
-      --chip: #efeae3;
-      --danger: #c0392b;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1a1917;
-        --surface: #24221f;
-        --text: #f1ede6;
-        --muted: #a39d93;
-        --accent: #e08a68;
-        --border: #3a3733;
-        --chip: #2e2b28;
-        --danger: #e06b5c;
-      }
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    a { color: var(--accent); }
-    .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
-    header { padding: 56px 0 32px; text-align: center; }
-    header h1 { font-size: clamp(2rem, 6vw, 3rem); letter-spacing: -0.02em; }
-    header h1 span { color: var(--accent); }
-    header p { margin-top: 12px; color: var(--muted); font-size: 1.1rem; }
-    .back { display: inline-block; margin-top: 16px; font-weight: 600; text-decoration: none; }
-    section { margin-bottom: 40px; }
-    h2 { font-size: 1.4rem; margin-bottom: 16px; }
-
-    .btn {
-      border: 1px solid var(--border); background: var(--surface); color: var(--text);
-      border-radius: 8px; padding: 8px 16px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
-    }
-    .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .btn.danger { color: var(--danger); }
-
-    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
-    .toolbar .search { flex: 1 1 220px; }
-    input, select, textarea {
-      width: 100%; padding: 10px 12px; font: inherit; font-size: 0.95rem;
-      border: 1px solid var(--border); border-radius: 8px;
-      background: var(--surface); color: var(--text);
-    }
-    .toolbar select { width: auto; }
-    textarea { resize: vertical; min-height: 110px; }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
-    .card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 16px; cursor: pointer; text-align: left; font: inherit; color: inherit;
-      display: flex; flex-direction: column; gap: 6px;
-    }
-    .card:hover { border-color: var(--accent); }
-    .card h3 { font-size: 1.05rem; }
-    .meta { color: var(--muted); font-size: 0.88rem; }
-    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: var(--chip); color: var(--muted); }
-    .empty {
-      color: var(--muted); text-align: center; padding: 40px 16px;
-      border: 1px dashed var(--border); border-radius: 12px;
-    }
-
-    dialog {
-      margin: auto; border: 1px solid var(--border); border-radius: 12px;
-      background: var(--surface); color: var(--text);
-      width: min(640px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 24px;
-    }
-    dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
-    dialog h2 { margin-bottom: 12px; }
-    form { display: grid; gap: 12px; }
-    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
-    label { display: grid; gap: 4px; font-size: 0.9rem; font-weight: 600; }
-    label small { font-weight: 400; color: var(--muted); }
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; margin-top: 8px; }
-    .actions .spacer { flex: 1; }
-
-    .detail h3 { font-size: 1rem; margin: 16px 0 6px; }
-    .detail ul, .detail ol { padding-left: 22px; }
-    .detail li { margin-bottom: 4px; }
-    .detail .notes { white-space: pre-wrap; color: var(--muted); }
-
-    .storage-note { color: var(--muted); font-size: 0.88rem; margin-top: 12px; }
-    footer {
-      border-top: 1px solid var(--border); padding: 24px 0;
-      text-align: center; color: var(--muted); font-size: 0.9rem;
-    }
-  </style>
+  <title>Enregistrer une recette – Claude Prime</title>
+  <link rel="stylesheet" href="cuisine.css">
 </head>
 <body>
+  <nav class="pages" aria-label="Pages cuisine">
+    <div class="container">
+      <a href="index.html">Accueil</a>
+      <a href="recettes.html" aria-current="page">Enregistrer</a>
+      <a href="menus.html">Menus de la semaine</a>
+      <a href="catalogue.html">Toutes mes recettes</a>
+      <a href="historique.html">Historique</a>
+    </div>
+  </nav>
+
   <header class="container">
-    <h1>Mes <span>recettes</span></h1>
-    <p>Enregistre les recettes qui méritent d'entrer dans ta base de données.</p>
-    <a class="back" href="index.html">← Retour à l'accueil</a>
+    <h1 id="page-title">Enregistrer une <span>recette</span></h1>
+    <p id="page-intro">Ajoute à ta base les recettes que tu as retenues.</p>
   </header>
 
   <main class="container">
     <section>
-      <div class="toolbar">
-        <button class="btn primary" id="add">+ Nouvelle recette</button>
-        <input class="search" id="search" type="search" placeholder="Rechercher (nom, ingrédient…)" aria-label="Rechercher une recette">
-        <select id="filter" aria-label="Filtrer par catégorie"></select>
+      <div id="notice"></div>
+      <div class="panel">
+        <form id="form">
+          <label>Nom de la recette
+            <input name="title" required maxlength="120">
+          </label>
+          <div class="row">
+            <label>Catégorie
+              <select name="category"></select>
+            </label>
+            <label>Portions
+              <input name="servings" type="number" min="1" max="100">
+            </label>
+            <label>Préparation <small>(min)</small>
+              <input name="prep" type="number" min="0" max="1440">
+            </label>
+            <label>Cuisson <small>(min)</small>
+              <input name="cook" type="number" min="0" max="1440">
+            </label>
+          </div>
+          <fieldset>
+            <legend>Saisons <small>— ne coche rien si la recette se fait toute l'année</small></legend>
+            <div class="checks" id="seasons"></div>
+          </fieldset>
+          <label>Ingrédients <small>un par ligne</small>
+            <textarea name="ingredients" placeholder="200 g de farine&#10;3 œufs&#10;50 cl de lait"></textarea>
+          </label>
+          <label>Étapes <small>une par ligne</small>
+            <textarea name="steps" placeholder="Mélanger la farine et les œufs.&#10;Ajouter le lait petit à petit."></textarea>
+          </label>
+          <label>Source <small>lien ou livre (facultatif)</small>
+            <input name="source" maxlength="300">
+          </label>
+          <label>Pourquoi je la garde / notes <small>(facultatif)</small>
+            <textarea name="notes" style="min-height: 70px;"></textarea>
+          </label>
+          <div class="actions">
+            <a class="btn" id="cancel" href="catalogue.html" hidden>Annuler</a>
+            <button type="submit" class="btn primary" id="submit">Enregistrer la recette</button>
+          </div>
+        </form>
       </div>
-      <div class="meta" id="count"></div>
-      <div class="grid" id="list" style="margin-top: 12px;"></div>
     </section>
 
-    <section>
-      <h2>Sauvegarde</h2>
-      <div class="toolbar">
-        <button class="btn" id="export">Exporter (JSON)</button>
-        <button class="btn" id="import">Importer un fichier</button>
-        <input type="file" id="import-file" accept="application/json,.json" hidden>
-      </div>
-      <p class="storage-note">
-        Les recettes sont enregistrées dans ce navigateur, sur cet appareil. Exporte-les régulièrement
-        pour garder une copie ou les transférer sur un autre appareil.
-      </p>
+    <section id="recent-section">
+      <h2>Dernières recettes ajoutées</h2>
+      <div class="grid" id="recent"></div>
+      <p class="meta" style="margin-top: 12px;"><a href="catalogue.html">Voir toutes mes recettes →</a></p>
     </section>
   </main>
 
@@ -139,271 +79,101 @@
     <div class="container">Claude Prime · Cours Vibe Coding &amp; IA</div>
   </footer>
 
-  <dialog id="form-dialog">
-    <h2 id="form-title">Nouvelle recette</h2>
-    <form id="form" method="dialog">
-      <label>Nom de la recette
-        <input name="title" required maxlength="120">
-      </label>
-      <div class="row">
-        <label>Catégorie
-          <select name="category"></select>
-        </label>
-        <label>Portions
-          <input name="servings" type="number" min="1" max="100">
-        </label>
-        <label>Préparation <small>(min)</small>
-          <input name="prep" type="number" min="0" max="1440">
-        </label>
-        <label>Cuisson <small>(min)</small>
-          <input name="cook" type="number" min="0" max="1440">
-        </label>
-      </div>
-      <label>Ingrédients <small>un par ligne</small>
-        <textarea name="ingredients" placeholder="200 g de farine&#10;3 œufs&#10;50 cl de lait"></textarea>
-      </label>
-      <label>Étapes <small>une par ligne</small>
-        <textarea name="steps" placeholder="Mélanger la farine et les œufs.&#10;Ajouter le lait petit à petit."></textarea>
-      </label>
-      <label>Source <small>lien ou livre (facultatif)</small>
-        <input name="source" maxlength="300">
-      </label>
-      <label>Pourquoi je la garde / notes <small>(facultatif)</small>
-        <textarea name="notes" style="min-height: 70px;"></textarea>
-      </label>
-      <div class="actions">
-        <button type="button" class="btn" id="cancel">Annuler</button>
-        <button type="submit" class="btn primary">Enregistrer</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="view-dialog">
-    <div class="detail" id="detail"></div>
-    <div class="actions">
-      <button class="btn danger" id="delete">Supprimer</button>
-      <span class="spacer"></span>
-      <button class="btn" id="edit">Modifier</button>
-      <button class="btn primary" id="close-view">Fermer</button>
-    </div>
-  </dialog>
-
+  <script src="cuisine.js"></script>
   <script>
-    const STORAGE_KEY = 'claude-prime-recettes';
-    const CATEGORIES = ['Entrée', 'Plat', 'Dessert', 'Boisson', 'Sauce', 'Accompagnement', 'Petit-déjeuner', 'Autre'];
+    const { el } = Cuisine;
+    const form = document.getElementById('form');
+    const notice = document.getElementById('notice');
+    const fields = form.elements;
+    const editId = new URLSearchParams(location.search).get('id');
 
-    const $ = id => document.getElementById(id);
-    const list = $('list'), search = $('search'), filter = $('filter'), count = $('count');
-    const formDialog = $('form-dialog'), form = $('form'), viewDialog = $('view-dialog');
-    let recipes = load();
-    let editingId = null, viewingId = null;
-
-    function load() {
-      try {
-        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        return Array.isArray(data) ? data : [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function save() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes));
-      } catch (e) {
-        alert("Impossible d'enregistrer dans ce navigateur. Pense à exporter tes recettes.");
-      }
-    }
-
-    function lines(text) {
-      return String(text || '').split('\n').map(l => l.trim()).filter(Boolean);
-    }
-
-    function normalize(s) {
-      return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-        .replace(/œ/g, 'oe').replace(/æ/g, 'ae');
-    }
-
-    function el(tag, props = {}, children = []) {
-      const node = document.createElement(tag);
-      Object.assign(node, props);
-      node.append(...children);
-      return node;
-    }
-
-    function timeLabel(r) {
-      const total = (Number(r.prep) || 0) + (Number(r.cook) || 0);
-      return total ? total + ' min' : '';
-    }
-
-    // Filtres
-    filter.append(el('option', { value: '', textContent: 'Toutes les catégories' }));
-    CATEGORIES.forEach(c => {
-      filter.append(el('option', { value: c, textContent: c }));
-      form.category.append(el('option', { value: c, textContent: c }));
+    Cuisine.CATEGORIES.forEach(c => fields.category.append(el('option', { value: c, textContent: c })));
+    fields.category.value = 'Plat';
+    const seasonBoxes = Cuisine.SEASONS.map(s => {
+      const box = el('input', { type: 'checkbox', value: s });
+      document.getElementById('seasons').append(el('label', {}, [box, s]));
+      return box;
     });
 
-    function render() {
-      const q = normalize(search.value.trim());
-      const cat = filter.value;
-      const shown = recipes
-        .filter(r => !cat || r.category === cat)
-        .filter(r => !q || normalize([r.title, r.ingredients.join(' '), r.notes, r.category].join(' ')).includes(q))
-        .sort((a, b) => a.title.localeCompare(b.title, 'fr'));
+    function showNotice(kind, children) {
+      notice.replaceChildren(el('p', { className: 'notice ' + kind }, children));
+      notice.style.marginBottom = '16px';
+    }
 
-      list.replaceChildren();
-      if (!recipes.length) {
-        list.append(el('p', { className: 'empty', textContent: 'Aucune recette pour l\'instant. Clique sur « + Nouvelle recette » pour commencer.' }));
-      } else if (!shown.length) {
-        list.append(el('p', { className: 'empty', textContent: 'Aucune recette ne correspond à ta recherche.' }));
-      }
-      shown.forEach(r => {
-        const meta = [r.servings ? r.servings + ' pers.' : '', timeLabel(r), r.ingredients.length + ' ingrédient' + (r.ingredients.length > 1 ? 's' : '')]
-          .filter(Boolean).join(' · ');
-        const card = el('button', { className: 'card' }, [
-          el('h3', { textContent: r.title }),
-          el('div', { className: 'meta', textContent: meta }),
-          el('div', { className: 'tags' }, [el('span', { className: 'tag', textContent: r.category })])
-        ]);
-        card.addEventListener('click', () => openView(r.id));
-        list.append(card);
+    // Mode modification : catalogue.html renvoie ici avec ?id=...
+    const editing = editId ? Cuisine.getRecipes().find(r => r.id === editId) : null;
+    if (editId && !editing) {
+      showNotice('warn', ['Cette recette est introuvable. Tu peux en enregistrer une nouvelle.']);
+    }
+    if (editing) {
+      document.title = 'Modifier une recette – Claude Prime';
+      document.getElementById('page-title').replaceChildren('Modifier la ', el('span', { textContent: 'recette' }));
+      document.getElementById('page-intro').textContent = editing.title;
+      document.getElementById('submit').textContent = 'Enregistrer les modifications';
+      document.getElementById('cancel').hidden = false;
+      document.getElementById('recent-section').hidden = true;
+      fields.title.value = editing.title;
+      fields.category.value = editing.category;
+      fields.servings.value = editing.servings;
+      fields.prep.value = editing.prep;
+      fields.cook.value = editing.cook;
+      seasonBoxes.forEach(b => { b.checked = editing.seasons.includes(b.value); });
+      fields.ingredients.value = editing.ingredients.join('\n');
+      fields.steps.value = editing.steps.join('\n');
+      fields.source.value = editing.source;
+      fields.notes.value = editing.notes;
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const data = Cuisine.cleanRecipe({
+        title: fields.title.value,
+        category: fields.category.value,
+        seasons: seasonBoxes.filter(b => b.checked).map(b => b.value),
+        servings: fields.servings.value,
+        prep: fields.prep.value,
+        cook: fields.cook.value,
+        ingredients: fields.ingredients.value,
+        steps: fields.steps.value,
+        source: fields.source.value.trim(),
+        notes: fields.notes.value.trim()
       });
-      count.textContent = recipes.length + ' recette' + (recipes.length > 1 ? 's' : '') + ' dans ta base';
-    }
-
-    function openForm(recipe) {
-      editingId = recipe ? recipe.id : null;
-      $('form-title').textContent = recipe ? 'Modifier la recette' : 'Nouvelle recette';
+      const recipes = Cuisine.getRecipes();
+      if (editing) {
+        const i = recipes.findIndex(r => r.id === editing.id);
+        recipes[i] = { ...data, id: editing.id, createdAt: editing.createdAt, updatedAt: new Date().toISOString() };
+        if (Cuisine.saveRecipes(recipes)) location.href = 'catalogue.html';
+        return;
+      }
+      const duplicate = recipes.some(r => Cuisine.normalize(r.title) === Cuisine.normalize(data.title));
+      if (duplicate && !confirm('Une recette « ' + data.title + ' » existe déjà. L\'enregistrer quand même ?')) return;
+      recipes.push(data);
+      if (!Cuisine.saveRecipes(recipes)) return;
+      showNotice('ok', ['« ' + data.title + ' » est enregistrée dans ta base. ', el('a', { href: 'catalogue.html', textContent: 'Voir toutes mes recettes' })]);
       form.reset();
-      if (recipe) {
-        form.title.value = recipe.title;
-        form.category.value = recipe.category;
-        form.servings.value = recipe.servings || '';
-        form.prep.value = recipe.prep || '';
-        form.cook.value = recipe.cook || '';
-        form.ingredients.value = recipe.ingredients.join('\n');
-        form.steps.value = recipe.steps.join('\n');
-        form.source.value = recipe.source || '';
-        form.notes.value = recipe.notes || '';
+      fields.category.value = 'Plat';
+      renderRecent();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    function renderRecent() {
+      const recent = Cuisine.getRecipes()
+        .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
+        .slice(0, 6);
+      const box = document.getElementById('recent');
+      box.replaceChildren();
+      if (!recent.length) {
+        box.append(el('p', { className: 'empty', textContent: 'Aucune recette pour l\'instant. Remplis le formulaire ci-dessus pour commencer.' }));
+        return;
       }
-      formDialog.showModal();
-      form.title.focus();
+      recent.forEach(r => box.append(el('div', { className: 'card' }, [
+        el('h3', { textContent: r.title }),
+        el('div', { className: 'meta', textContent: Cuisine.seasonsLabel(r) }),
+        el('div', { className: 'tags' }, [el('span', { className: 'tag', textContent: r.category })])
+      ])));
     }
 
-    form.addEventListener('submit', () => {
-      const data = {
-        title: form.title.value.trim(),
-        category: form.category.value,
-        servings: form.servings.value,
-        prep: form.prep.value,
-        cook: form.cook.value,
-        ingredients: lines(form.ingredients.value),
-        steps: lines(form.steps.value),
-        source: form.source.value.trim(),
-        notes: form.notes.value.trim()
-      };
-      if (editingId) {
-        const r = recipes.find(x => x.id === editingId);
-        Object.assign(r, data, { updatedAt: new Date().toISOString() });
-      } else {
-        const id = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
-        recipes.push({ id, ...data, createdAt: new Date().toISOString() });
-      }
-      save();
-      render();
-      if (editingId && viewingId === editingId) openView(editingId);
-    });
-
-    function openView(id) {
-      const r = recipes.find(x => x.id === id);
-      if (!r) return;
-      viewingId = id;
-      const detail = $('detail');
-      detail.replaceChildren(
-        el('h2', { textContent: r.title }),
-        el('div', { className: 'meta', textContent: [r.category, r.servings ? r.servings + ' personnes' : '',
-          r.prep ? 'préparation ' + r.prep + ' min' : '', r.cook ? 'cuisson ' + r.cook + ' min' : ''].filter(Boolean).join(' · ') })
-      );
-      if (r.ingredients.length) {
-        detail.append(el('h3', { textContent: 'Ingrédients' }), el('ul', {}, r.ingredients.map(i => el('li', { textContent: i }))));
-      }
-      if (r.steps.length) {
-        detail.append(el('h3', { textContent: 'Étapes' }), el('ol', {}, r.steps.map(s => el('li', { textContent: s }))));
-      }
-      if (r.source) {
-        const isUrl = /^https?:\/\//i.test(r.source);
-        detail.append(el('h3', { textContent: 'Source' }),
-          isUrl ? el('a', { href: r.source, target: '_blank', rel: 'noopener', textContent: r.source })
-                : el('p', { textContent: r.source }));
-      }
-      if (r.notes) {
-        detail.append(el('h3', { textContent: 'Notes' }), el('p', { className: 'notes', textContent: r.notes }));
-      }
-      if (!viewDialog.open) viewDialog.showModal();
-    }
-
-    $('add').addEventListener('click', () => openForm(null));
-    $('cancel').addEventListener('click', () => formDialog.close());
-    $('close-view').addEventListener('click', () => { viewDialog.close(); viewingId = null; });
-    $('edit').addEventListener('click', () => openForm(recipes.find(x => x.id === viewingId)));
-    $('delete').addEventListener('click', () => {
-      const r = recipes.find(x => x.id === viewingId);
-      if (r && confirm('Supprimer la recette « ' + r.title + ' » ?')) {
-        recipes = recipes.filter(x => x.id !== viewingId);
-        save();
-        viewDialog.close();
-        viewingId = null;
-        render();
-      }
-    });
-    search.addEventListener('input', render);
-    filter.addEventListener('change', render);
-
-    // Export / import
-    $('export').addEventListener('click', () => {
-      const blob = new Blob([JSON.stringify(recipes, null, 2)], { type: 'application/json' });
-      const a = el('a', { href: URL.createObjectURL(blob), download: 'mes-recettes.json' });
-      document.body.append(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(a.href);
-    });
-    $('import').addEventListener('click', () => $('import-file').click());
-    $('import-file').addEventListener('change', async e => {
-      const file = e.target.files[0];
-      e.target.value = '';
-      if (!file) return;
-      try {
-        const data = JSON.parse(await file.text());
-        if (!Array.isArray(data)) throw new Error();
-        const known = new Set(recipes.map(r => r.id));
-        let added = 0;
-        data.forEach(r => {
-          if (!r || typeof r.title !== 'string' || !r.title.trim()) return;
-          if (r.id && known.has(String(r.id))) return; // déjà présente
-          const clean = {
-            id: r.id ? String(r.id) : Date.now().toString(36) + Math.random().toString(36).slice(2),
-            title: r.title.trim(),
-            category: CATEGORIES.includes(r.category) ? r.category : 'Autre',
-            servings: r.servings || '', prep: r.prep || '', cook: r.cook || '',
-            ingredients: Array.isArray(r.ingredients) ? r.ingredients.map(String) : lines(r.ingredients),
-            steps: Array.isArray(r.steps) ? r.steps.map(String) : lines(r.steps),
-            source: r.source ? String(r.source) : '', notes: r.notes ? String(r.notes) : '',
-            createdAt: r.createdAt || new Date().toISOString()
-          };
-          known.add(clean.id);
-          recipes.push(clean);
-          added++;
-        });
-        save();
-        render();
-        alert(added + ' recette' + (added > 1 ? 's' : '') + ' importée' + (added > 1 ? 's' : '') + '.');
-      } catch (err) {
-        alert("Ce fichier n'est pas un export de recettes valide.");
-      }
-    });
-
-    render();
+    if (!editing) renderRecent();
   </script>
 </body>
 </html>
