@@ -1,0 +1,12 @@
+# Fichiers du dépôt qui ne doivent pas être publiés comme pages par le Worker.
+.git
+.github
+.gitignore
+.assetsignore
+.wrangler
+node_modules
+worker
+tests
+package.json
+package-lock.json
+wrangler.jsonc

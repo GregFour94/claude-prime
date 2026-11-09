@@ -1,0 +1,20 @@
+// Configuration du Worker « claude-prime-outils » (fiches outils + commentaires dans R2).
+// Aucun secret ici. Les réglages ACCESS_TEAM_DOMAIN, ACCESS_AUD, EDITEURS et ORIGINES_LECTURE
+// se saisissent dans le tableau de bord Cloudflare (Worker > Settings > Variables) ;
+// « keep_vars » empêche un déploiement de les effacer. Voir worker/README.md.
+{
+  "name": "claude-prime-outils",
+  "main": "worker/src/index.js",
+  "compatibility_date": "2025-09-01",
+  "keep_vars": true,
+  // Le Worker sert aussi les pages du site (index.html, outils.html…) : la page et l'API ont
+  // ainsi la même origine, ce qui permet la connexion Cloudflare Access pour les modifications.
+  "assets": {
+    "directory": ".",
+    "run_worker_first": ["/api/*"]
+  },
+  "r2_buckets": [
+    { "binding": "FICHES", "bucket_name": "claude-prime-outils" }
+  ],
+  "observability": { "enabled": true }
+}

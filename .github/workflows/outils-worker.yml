@@ -1,0 +1,64 @@
+# Tests de la boîte à outils (Worker + page dans un navigateur) et déploiement du Worker Cloudflare.
+# - Tests : à chaque push et pull request.
+# - Déploiement : seulement sur main, et seulement si les secrets Cloudflare sont configurés
+#   dans GitHub (Settings > Secrets and variables > Actions). Sinon l'étape est ignorée.
+# Le déploiement n'initialise jamais les fiches et ne touche pas aux données R2.
+# Aucun secret n'est écrit dans ce fichier.
+name: Boîte à outils – tests et Worker
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: outils-worker-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: Tests (Worker + navigateur)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+
+  deploiement:
+    name: Déploiement sur Cloudflare
+    needs: tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Secrets Cloudflare configurés ?
+        id: config
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_COMPTE: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$CF_TOKEN" ] && [ -n "$CF_COMPTE" ]; then
+            echo "pret=oui" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::Secrets CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID absents : déploiement ignoré."
+            echo "pret=non" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.config.outputs.pret == 'oui'
+      - uses: cloudflare/wrangler-action@v3
+        if: steps.config.outputs.pret == 'oui'
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.151.1"
+          command: deploy
