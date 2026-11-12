@@ -1,13 +1,17 @@
-/* Gabarit commun : pied de page de toutes les pages, et mise en page des pages d'information
-   (aide, info site, accessibilité, données personnelles, mentions légales).
-   index.html et outils.html gardent leurs propres styles, chargés après ce fichier. */
+/* Base commune à toutes les pages : couleurs, lien d'évitement, menu, pied de page,
+   mise en page des pages d'information. Chaque page n'ajoute que ses styles propres.
+   Contrastes vérifiés : texte 4,5:1 au moins, bordures de champs 3:1 au moins. */
 :root {
   --bg: #f7f5f2;
   --surface: #ffffff;
   --text: #1f1d1a;
   --muted: #6b665e;
-  --accent: #c96442;
+  --accent: #a9472a;
+  --on-accent: #ffffff;
   --border: #e6e1d9;
+  --bord-champ: #6b665e;
+  --chip: #efeae3;
+  --erreur: #c0392b;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -16,7 +20,11 @@
     --text: #f1ede6;
     --muted: #a39d93;
     --accent: #e08a68;
+    --on-accent: #1a1917;
     --border: #3a3733;
+    --bord-champ: #a39d93;
+    --chip: #2e2b28;
+    --erreur: #f08a7e;
   }
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,11 +36,34 @@ body {
 }
 .container { max-width: 880px; margin: 0 auto; padding: 0 16px; }
 
+/* Texte réservé aux lecteurs d'écran */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Lien d'évitement : visible dès qu'il reçoit le focus */
+.evitement {
+  position: absolute; left: 8px; top: -100px; z-index: 10;
+  background: var(--surface); color: var(--text); padding: 8px 12px;
+  border: 2px solid var(--text); border-radius: 6px; font-weight: 600;
+}
+.evitement:focus { top: 8px; }
+
+/* Menu principal */
+nav.menu { border-bottom: 1px solid var(--border); background: var(--surface); }
+nav.menu ul {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 4px 20px;
+  max-width: 880px; margin: 0 auto; padding: 10px 16px;
+}
+nav.menu a { color: var(--text); font-weight: 600; text-underline-offset: 3px; }
+nav.menu a[aria-current="page"] { color: var(--accent); }
+
 /* Pages d'information */
 .page-info header { padding: 56px 0 32px; text-align: center; }
 .page-info header h1 { font-size: clamp(2rem, 6vw, 2.8rem); letter-spacing: -0.02em; }
 .page-info header p { margin-top: 12px; color: var(--muted); font-size: 1.1rem; }
-.page-info .back { display: inline-block; margin-top: 16px; font-weight: 600; text-decoration: none; color: var(--accent); }
+.page-info .back { display: inline-block; margin-top: 16px; font-weight: 600; color: var(--accent); }
 .page-info main section {
   background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
   padding: 20px; margin-bottom: 20px;

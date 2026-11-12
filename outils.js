@@ -92,10 +92,20 @@ function listeCommentaires(cs) {
   ]));
 }
 
+// Lien vers un autre site, ouvert dans un nouvel onglet : la flèche est décorative,
+// l'ouverture d'un onglet est annoncée aux lecteurs d'écran.
+function lienExterne(href, texte) {
+  return el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, [
+    texte,
+    el('span', { 'aria-hidden': 'true', textContent: ' ↗' }),
+    el('span', { className: 'sr-only', textContent: ' (nouvel onglet)' })
+  ]);
+}
+
 function carte(f) {
   const { nom, url, description, categorie, type } = f.champs;
   const h = el('h3');
-  if (estUrlHttp(url)) h.append(el('a', { href: url, target: '_blank', rel: 'noopener noreferrer', textContent: nom + ' ↗' }));
+  if (estUrlHttp(url)) h.append(lienExterne(url, nom));
   else h.textContent = nom;
 
   const enfants = [
@@ -114,7 +124,7 @@ function carte(f) {
     for (const cle of perso) {
       const t = f.types[cle], v = f.champs[cle];
       const dd = el('dd');
-      if (t === 'url' && estUrlHttp(v)) dd.append(el('a', { href: v, target: '_blank', rel: 'noopener noreferrer', textContent: v }));
+      if (t === 'url' && estUrlHttp(v)) dd.append(lienExterne(v, v));
       else dd.textContent = valeurAffichee(t, v);
       dl.append(el('dt', { textContent: cle }), dd);
     }
@@ -124,17 +134,18 @@ function carte(f) {
   const cs = etat.commentaires[f.outilId] || [];
   if (cs.length) {
     enfants.push(el('details', {}, [
-      el('summary', { textContent: `💬 ${pluriel(cs.length, 'commentaire')}` }),
+      el('summary', {}, [el('span', { 'aria-hidden': 'true', textContent: '💬 ' }), pluriel(cs.length, 'commentaire')]),
       el('ul', { className: 'commentaires' }, listeCommentaires(cs))
     ]));
   }
 
+  // Le nom de l'outil complète l'intitulé pour les lecteurs d'écran (liste des boutons de la page).
+  // Les clics sont traités une seule fois pour toute la grille (voir plus bas).
   const ok = peutModifier(f), raison = raisonBlocage(f);
-  const bModifier = el('button', { className: 'btn', type: 'button', textContent: 'Modifier la fiche', disabled: !ok, title: raison });
-  const bCommenter = el('button', { className: 'btn', type: 'button', textContent: 'Ajouter un commentaire', disabled: !ok, title: raison });
-  bModifier.addEventListener('click', () => ouvrirEdition(f.outilId));
-  bCommenter.addEventListener('click', () => ouvrirCommentaires(f.outilId));
-  enfants.push(el('div', { className: 'card-actions' }, [bModifier, bCommenter]));
+  const bouton = (action, intitule) => el('button', {
+    className: 'btn', type: 'button', disabled: !ok, title: raison, dataset: { action, outilId: f.outilId }
+  }, [intitule, el('span', { className: 'sr-only', textContent: ` : ${nom}` })]);
+  enfants.push(el('div', { className: 'card-actions' }, [bouton('modifier', 'Modifier la fiche'), bouton('commenter', 'Ajouter un commentaire')]));
 
   return el('article', { className: 'card', dataset: { outilId: f.outilId } }, enfants);
 }
@@ -270,7 +281,8 @@ function champFormulaire(cle, type, valeur) {
     ? (base.requis ? ' (obligatoire)' : ' (facultatif)')
     : ` (champ personnalisé · ${TYPES[type] ? TYPES[type].libelle : type})`;
   const max = limiteDuChamp(cle, type);
-  const commun = { id, dataset: { cle, type } };
+  const commun = { id, dataset: { cle, type }, 'aria-describedby': 'err-' + cle };
+  const format = { url: ' — adresse commençant par https:// ou http://', liste: ' — un élément par ligne' }[type] || '';
   let saisie;
   switch (type) {
     case 'texteLong':
@@ -305,7 +317,7 @@ function champFormulaire(cle, type, valeur) {
     default: // type inconnu : affiché, jamais modifié, toujours renvoyé tel quel
       saisie = el('input', { ...commun, type: 'text', value: JSON.stringify(valeur), readOnly: true });
   }
-  const libelle = el('label', { htmlFor: id }, [base ? base.libelle : cle, el('small', { textContent: aide + (type === 'liste' ? ' — un élément par ligne' : '') })]);
+  const libelle = el('label', { htmlFor: id }, [base ? base.libelle : cle, el('small', { textContent: aide + format })]);
   const erreur = el('span', { className: 'erreur', id: 'err-' + cle });
   if (type === 'booleen') {
     return el('div', { className: 'champ' }, [el('label', { className: 'case', htmlFor: id }, [saisie, base ? base.libelle : cle, el('small', { textContent: aide })]), erreur]);
@@ -347,10 +359,14 @@ function lireFormulaire(fiche) {
 
 function afficherErreurs(erreurs) {
   zoneChamps.querySelectorAll('.erreur').forEach(e => { e.textContent = ''; });
+  zoneChamps.querySelectorAll('[aria-invalid]').forEach(e => e.removeAttribute('aria-invalid'));
   const generales = [];
   for (const { champ, message } of erreurs) {
     const zone = champ && $('err-' + champ);
-    if (zone) zone.textContent = message;
+    if (zone) {
+      zone.textContent = message;
+      $('champ-' + champ)?.setAttribute('aria-invalid', 'true');
+    }
     else generales.push(message);
   }
   afficherAlerte(alerteFiche, 'Corrige les champs signalés.' + (generales.length ? ' ' + generales.join(' · ') : ''));
@@ -427,6 +443,7 @@ function ouvrirCommentaires(outilId) {
   texteComm.value = '';
   majCompteur();
   afficherAlerte(alerteComm, '');
+  texteComm.removeAttribute('aria-invalid');
   $('comm-envoyer').disabled = false;
   dlgComm.showModal();
   texteComm.focus();
@@ -436,7 +453,11 @@ formComm.addEventListener('submit', async e => {
   e.preventDefault();
   const texte = texteComm.value;
   const probleme = validerCommentaire(texte);
-  if (probleme) return afficherAlerte(alerteComm, `Commentaire non envoyé : ${probleme}.`);
+  if (probleme) {
+    texteComm.setAttribute('aria-invalid', 'true');
+    return afficherAlerte(alerteComm, `Commentaire non envoyé : ${probleme}.`);
+  }
+  texteComm.removeAttribute('aria-invalid');
   const bouton = $('comm-envoyer');
   bouton.disabled = true;
   let reponse;
@@ -466,7 +487,17 @@ $('comm-annuler').addEventListener('click', () => dlgComm.close());
 
 makeChip('all', 'Tous');
 Object.entries(CATEGORIES).forEach(([k, v]) => makeChip(k, v));
-search.addEventListener('input', render);
+grid.addEventListener('click', e => {
+  const b = e.target.closest('button[data-action]');
+  if (!b || b.disabled) return;
+  if (b.dataset.action === 'modifier') ouvrirEdition(b.dataset.outilId);
+  else ouvrirCommentaires(b.dataset.outilId);
+});
+let minuterieRecherche;
+search.addEventListener('input', () => {
+  clearTimeout(minuterieRecherche);
+  minuterieRecherche = setTimeout(render, 150);
+});
 render();                       // liste d'origine tout de suite
 await chargerFiches();          // puis les fiches et commentaires enregistrés
 await chargerSession();

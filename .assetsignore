@@ -10,3 +10,4 @@ tests
 package.json
 package-lock.json
 wrangler.jsonc
+audits

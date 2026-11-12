@@ -137,7 +137,7 @@ seulement `/api/admin/*`. Il reste à renseigner l'adresse du Worker dans
 ```bash
 npm ci
 npx playwright install chromium   # une seule fois
-npm test                          # Worker (55 tests) + page dans Chromium (12 tests)
+npm test                          # Worker (55) + boîte à outils dans Chromium (12) + pages, accessibilité et pied de page (9)
 node tests/helpers/serveur.mjs    # essai manuel : données en mémoire, éditeur fictif connecté
 ```
 

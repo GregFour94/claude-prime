@@ -61,11 +61,13 @@ describe('page outils.html dans le navigateur', { timeout: 60000 }, () => {
     await page.click('.chip:has-text("Composants UI")');
     assert.equal(await page.innerText('#count'), '8 outils');
     await page.click('.chip:has-text("Tous")');
+    // La recherche s'applique après une courte pause de frappe.
     await page.fill('#search', 'animation');
-    assert.equal(await page.innerText('#count'), '6 outils');
+    await page.waitForSelector('#count >> text="6 outils"');
     await page.fill('#search', 'zzzz');
     assert.equal(await page.innerText('.empty'), 'Aucun outil ne correspond à ta recherche.');
     await page.fill('#search', '');
+    await page.waitForSelector('#count >> text="71 outils"');
     assert.equal(await page.locator('.card h3 a').count(), 68, '68 outils avec lien, 3 sans');
     assert.equal(await carte(page, A.outilId).locator('h3 a').getAttribute('href'), A.url);
     assert.equal(await page.locator('a.back').getAttribute('href'), 'index.html');
@@ -160,7 +162,8 @@ describe('page outils.html dans le navigateur', { timeout: 60000 }, () => {
     await page.reload();
     await page.waitForSelector('#statut >> text=lus depuis le serveur');
     const c = carte(page, A.outilId);
-    assert.equal(await c.locator('h3 a').innerText(), 'Aider (modifié) ↗');
+    assert.equal(await c.locator('h3 a').textContent(), 'Aider (modifié) ↗ (nouvel onglet)');
+    assert.equal(await c.locator('h3 a [aria-hidden="true"]').textContent(), ' ↗');
     assert.equal(await c.locator('h3 a').getAttribute('href'), 'https://aider.chat/');
     assert.match(await c.innerText(), /Nouvelle description\.[\s\S]*Apprendre[\s\S]*Terminal/);
     assert.match(await c.locator('.extras').innerText(), /gratuit\s+Oui[\s\S]*note\s+4\.5[\s\S]*langages\s+Go, Rust/);

@@ -6,10 +6,32 @@
 # Aucun secret n'est écrit dans ce fichier.
 name: Boîte à outils – tests et Worker
 
+# Ne tourne que si un fichier du site, du Worker, des tests ou de la configuration change
+# (éco-conception : pas d'exécution pour une simple modification de documentation).
 on:
   push:
     branches: [main]
+    paths:
+      - '*.html'
+      - '*.css'
+      - '*.js'
+      - 'worker/src/**'
+      - 'tests/**'
+      - 'package*.json'
+      - 'wrangler.jsonc'
+      - '.assetsignore'
+      - '.github/workflows/outils-worker.yml'
   pull_request:
+    paths:
+      - '*.html'
+      - '*.css'
+      - '*.js'
+      - 'worker/src/**'
+      - 'tests/**'
+      - 'package*.json'
+      - 'wrangler.jsonc'
+      - '.assetsignore'
+      - '.github/workflows/outils-worker.yml'
   workflow_dispatch:
 
 permissions:
@@ -31,7 +53,16 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      # Navigateur gardé en cache d'une exécution à l'autre (clé : version de Playwright).
+      - id: navigateur
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.navigateur.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - if: steps.navigateur.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
       - run: npm test
 
   deploiement:

@@ -7,36 +7,36 @@
   <link rel="stylesheet" href="site.css">
 </head>
 <body class="page-info">
+  <a class="evitement" href="#contenu">Aller au contenu principal</a>
+  <nav class="menu" aria-label="Menu principal">
+    <ul>
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="outils.html">Boîte à outils</a></li>
+      <li><a href="plan-du-site.html">Plan du site</a></li>
+    </ul>
+  </nav>
   <header class="container">
     <h1>Accessibilité</h1>
     <p>État de l'accessibilité du site Claude Prime.</p>
-    <a class="back" href="index.html">← Retour à l'accueil</a>
+    <a class="back" href="index.html"><span aria-hidden="true">← </span>Retour à l'accueil</a>
   </header>
 
-  <main class="container">
+  <main class="container" id="contenu">
 
     <section>
       <h2>État de conformité</h2>
-      <p>Le site Claude Prime est <strong>non conforme</strong> : aucun audit d'accessibilité n'a été réalisé. Aucun taux de conformité n'est donc annoncé.</p>
+      <p>Le site Claude Prime est <strong>non conforme</strong> au RGAA 4.1.2 : aucun audit de conformité n'a été réalisé.</p>
+      <p>Une auto-évaluation assistée par IA, faite le 12 novembre 2026 à partir du code des 8 pages, donne : 16 critères conformes, aucune non-conformité restante dans le code, 43 critères non applicables et 47 critères à vérifier par une personne (clavier, focus, zoom, contrastes au rendu, lecteur d'écran). Ce n'est pas un audit.</p>
     </section>
 
     <section>
-      <h2>Points relevés, liste non exhaustive</h2>
+      <h2>Corrections apportées le 12 novembre 2026</h2>
       <ul>
-        <li>Contraste insuffisant du texte blanc sur les boutons de couleur accent : 3,9:1 en mode clair et 2,6:1 en mode sombre, pour 4,5:1 attendu.</li>
-        <li>Contraste insuffisant des liens de couleur accent sur le fond clair : 3,6:1.</li>
-        <li>Les liens vers les sites des outils s'ouvrent dans un nouvel onglet sans que ce soit annoncé.</li>
-        <li>Quand un bouton est désactivé, sa raison n'est donnée que dans une info-bulle et dans le message placé au-dessus de la liste.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>Éléments présents dans le code (non audités)</h2>
-      <ul>
-        <li>Langue de chaque page déclarée en français.</li>
-        <li>Pied de page dans une zone de navigation nommée « Pied de page ».</li>
-        <li>Boutons, champs et fenêtres de dialogue natifs du navigateur ; message d'état de la boîte à outils annoncé aux lecteurs d'écran.</li>
-        <li>Affichage adapté aux écrans de téléphone et au mode sombre.</li>
+        <li>Contrastes du texte relevés à 4,5:1 au moins, bordures des champs à 3:1 au moins, en mode clair et en mode sombre.</li>
+        <li>Lien « Aller au contenu principal », menu principal et page <a href="plan-du-site.html">Plan du site</a> sur toutes les pages.</li>
+        <li>Champ de recherche avec une étiquette visible ; messages d'erreur reliés à leur champ ; format attendu indiqué pour les adresses web.</li>
+        <li>Intitulés de boutons explicites ; ouverture d'un nouvel onglet annoncée ; émojis et flèches décoratifs ignorés par les lecteurs d'écran.</li>
+        <li>Nombre de résultats de recherche annoncé ; tableau des méthodes de travail relié à son titre ; passage en anglais signalé.</li>
       </ul>
     </section>
 
