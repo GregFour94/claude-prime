@@ -9,8 +9,9 @@ import { fileURLToPath } from 'node:url';
 import worker from '../../worker/src/index.js';
 
 const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.md': 'text/markdown; charset=utf-8' };
-const PUBLICS = new Set(['index.html', 'outils.html', 'outils.js', 'outils-data.js', 'outils-schema.js', 'README.md']);
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.md': 'text/markdown; charset=utf-8' };
+export const PAGES = ['index.html', 'outils.html', 'aide.html', 'info-site.html', 'accessibilite.html', 'donnees-personnelles.html', 'mentions-legales.html'];
+const PUBLICS = new Set([...PAGES, 'site.css', 'outils.js', 'outils-data.js', 'outils-schema.js', 'README.md']);
 
 export async function demarrerServeur({ env, jeton = null, utilisateur = null, sansApi = false } = {}) {
   const etat = { env, utilisateur, sansApi, requetesApi: [] };

@@ -1,0 +1,71 @@
+/* Gabarit commun : pied de page de toutes les pages, et mise en page des pages d'information
+   (aide, info site, accessibilité, données personnelles, mentions légales).
+   index.html et outils.html gardent leurs propres styles, chargés après ce fichier. */
+:root {
+  --bg: #f7f5f2;
+  --surface: #ffffff;
+  --text: #1f1d1a;
+  --muted: #6b665e;
+  --accent: #c96442;
+  --border: #e6e1d9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1917;
+    --surface: #24221f;
+    --text: #f1ede6;
+    --muted: #a39d93;
+    --accent: #e08a68;
+    --border: #3a3733;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+.container { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+
+/* Pages d'information */
+.page-info header { padding: 56px 0 32px; text-align: center; }
+.page-info header h1 { font-size: clamp(2rem, 6vw, 2.8rem); letter-spacing: -0.02em; }
+.page-info header p { margin-top: 12px; color: var(--muted); font-size: 1.1rem; }
+.page-info .back { display: inline-block; margin-top: 16px; font-weight: 600; text-decoration: none; color: var(--accent); }
+.page-info main section {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px; margin-bottom: 20px;
+}
+.page-info main h2 { font-size: 1.25rem; margin-bottom: 10px; }
+.page-info main p + p, .page-info main p + ul, .page-info main ul + p, .page-info main dl + p { margin-top: 10px; }
+.page-info main ul { padding-left: 22px; }
+.page-info main li + li { margin-top: 4px; }
+.page-info main dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; }
+.page-info main dt { font-weight: 600; }
+.page-info main a { color: var(--accent); }
+.page-info main { margin-bottom: 48px; }
+.a-renseigner { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; }
+@media (max-width: 520px) {
+  .page-info main dl { grid-template-columns: 1fr; gap: 2px; }
+  .page-info main dd { margin-bottom: 8px; }
+}
+
+/* Pied de page commun */
+footer.pied {
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+footer.pied nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  margin-bottom: 12px;
+}
+footer.pied nav a { color: var(--text); text-underline-offset: 3px; }
+footer.pied nav a:hover { color: var(--accent); }

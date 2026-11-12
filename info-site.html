@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Info site – Claude Prime</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body class="page-info">
+  <header class="container">
+    <h1>Info site</h1>
+    <p>Ce qu'il faut savoir sur ce site.</p>
+    <a class="back" href="index.html">← Retour à l'accueil</a>
+  </header>
+
+  <main class="container">
+
+    <section>
+      <h2>Objet</h2>
+      <p>Claude Prime est le site du dépôt Git du cours sur le Vibe Coding et l'Intelligence Artificielle.</p>
+    </section>
+
+    <section>
+      <h2>Éditeur et hébergement</h2>
+      <dl>
+        <dt>Éditeur</dt><dd><span class="a-renseigner">[Claude-code]</span></dd>
+        <dt>Hébergeur</dt><dd><span class="a-renseigner">[cloudflare]</span></dd>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Fonctionnement technique</h2>
+      <ul>
+        <li>Pages HTML statiques, avec du CSS et du JavaScript écrits à la main, sans framework.</li>
+        <li>Aucune police, image, feuille de style ni script n'est chargé depuis un autre domaine : le texte utilise les polices du système.</li>
+        <li>Les fiches et commentaires de la boîte à outils sont lus et enregistrés par un Worker Cloudflare, dans un stockage R2. Quand ce service ne répond pas, la page affiche la liste d'origine en lecture seule.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Code source et contenus</h2>
+      <ul>
+        <li>Code source : <a href="https://github.com/gregfour94/claude-prime">dépôt GitHub gregfour94/claude-prime</a>.</li>
+        <li>Outils de code et d'apprentissage : liste <a href="https://github.com/Scap-Mehdi/awesome-vibecoding">awesome-vibecoding</a> (domaine public, CC0).</li>
+        <li>Ressources de design et d'interface : liste « 25 vibe coding resources » du cours Vibe Coding.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="pied">
+    <div class="container">
+      <nav aria-label="Pied de page">
+        <ul>
+          <li><a href="aide.html#contact">Contact</a></li>
+          <li><a href="aide.html">Aide</a></li>
+          <li><a href="info-site.html">Info site</a></li>
+          <li><a href="accessibilite.html">Accessibilité : non conforme</a></li>
+          <li><a href="index.html">Site de Grégoire F.</a></li>
+          <li><a href="donnees-personnelles.html">Cookies / Données personnelles</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+        </ul>
+      </nav>
+      <p>Claude Prime · Cours Vibe Coding &amp; IA</p>
+    </div>
+  </footer>
+</body>
+</html>

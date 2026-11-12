@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibilité – Claude Prime</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body class="page-info">
+  <header class="container">
+    <h1>Accessibilité</h1>
+    <p>État de l'accessibilité du site Claude Prime.</p>
+    <a class="back" href="index.html">← Retour à l'accueil</a>
+  </header>
+
+  <main class="container">
+
+    <section>
+      <h2>État de conformité</h2>
+      <p>Le site Claude Prime est <strong>non conforme</strong> : aucun audit d'accessibilité n'a été réalisé. Aucun taux de conformité n'est donc annoncé.</p>
+    </section>
+
+    <section>
+      <h2>Points relevés, liste non exhaustive</h2>
+      <ul>
+        <li>Contraste insuffisant du texte blanc sur les boutons de couleur accent : 3,9:1 en mode clair et 2,6:1 en mode sombre, pour 4,5:1 attendu.</li>
+        <li>Contraste insuffisant des liens de couleur accent sur le fond clair : 3,6:1.</li>
+        <li>Les liens vers les sites des outils s'ouvrent dans un nouvel onglet sans que ce soit annoncé.</li>
+        <li>Quand un bouton est désactivé, sa raison n'est donnée que dans une info-bulle et dans le message placé au-dessus de la liste.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Éléments présents dans le code (non audités)</h2>
+      <ul>
+        <li>Langue de chaque page déclarée en français.</li>
+        <li>Pied de page dans une zone de navigation nommée « Pied de page ».</li>
+        <li>Boutons, champs et fenêtres de dialogue natifs du navigateur ; message d'état de la boîte à outils annoncé aux lecteurs d'écran.</li>
+        <li>Affichage adapté aux écrans de téléphone et au mode sombre.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Signaler un problème</h2>
+      <p>Pour signaler un défaut d'accessibilité, voir la rubrique <a href="aide.html#contact">Contact</a>.</p>
+    </section>
+  </main>
+
+  <footer class="pied">
+    <div class="container">
+      <nav aria-label="Pied de page">
+        <ul>
+          <li><a href="aide.html#contact">Contact</a></li>
+          <li><a href="aide.html">Aide</a></li>
+          <li><a href="info-site.html">Info site</a></li>
+          <li><a href="accessibilite.html">Accessibilité : non conforme</a></li>
+          <li><a href="index.html">Site de Grégoire F.</a></li>
+          <li><a href="donnees-personnelles.html">Cookies / Données personnelles</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+        </ul>
+      </nav>
+      <p>Claude Prime · Cours Vibe Coding &amp; IA</p>
+    </div>
+  </footer>
+</body>
+</html>
