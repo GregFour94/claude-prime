@@ -121,6 +121,21 @@ Dans *Settings > Secrets and variables > Actions*, ajoute :
 
 Sans ces secrets, le workflow lance seulement les tests.
 
+### GitHub (déploiement manuel, environnement « formation »)
+
+Le workflow `.github/workflows/deploy-worker.yml` déploie le Worker à la demande
+(onglet *Actions* > « Déployer le Worker de formation » > *Run workflow*, branche `main` uniquement).
+Il installe la version de Wrangler fixée dans `worker/package.json` et `worker/package-lock.json`,
+puis déploie avec la configuration `wrangler.jsonc` de la racine.
+
+Dans *Settings > Environments*, crée l'environnement `formation` et ajoute-lui :
+
+- le secret `CLOUDFLARE_API_TOKEN` (*Environment secrets*) : le même type de jeton que ci-dessus ;
+- la variable `CLOUDFLARE_ACCOUNT_ID` (*Environment variables*) : l'identifiant du compte, qui n'est pas secret.
+
+Les deux workflows déploient le même Worker : le déploiement automatique (secrets du dépôt) et le
+déploiement manuel (environnement `formation`) peuvent coexister.
+
 ## Site GitHub Pages
 
 La copie publiée par GitHub Pages (`gregfour94.github.io/claude-prime/outils.html`) ne peut pas

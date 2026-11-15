@@ -1,0 +1,9 @@
+{
+  "name": "claude-prime-worker",
+  "private": true,
+  "type": "module",
+  "description": "Outil de déploiement du Worker (wrangler). La configuration est dans ../wrangler.jsonc.",
+  "devDependencies": {
+    "wrangler": "4.151.1"
+  }
+}
