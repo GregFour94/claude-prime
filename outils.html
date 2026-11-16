@@ -16,6 +16,7 @@
     header p { margin: 12px auto 0; color: var(--muted); font-size: 1.1rem; max-width: 640px; }
     .back { display: inline-block; margin-top: 16px; font-weight: 600; text-decoration: none; }
     section { margin-bottom: 48px; }
+    .photo-atelier { margin: 0 0 48px; text-align: center; }
     h2 { font-size: 1.4rem; margin-bottom: 16px; }
 
     .steps { list-style: none; counter-reset: step; display: grid; gap: 12px; }
@@ -131,6 +132,18 @@
   </header>
 
   <main class="container" id="contenu">
+    <!-- ===== PHOTO-ATELIER : début ===== -->
+    <!-- Photo de l'atelier, hébergée sur Cloudflare R2 (seule ressource chargée depuis un autre domaine). -->
+    <figure class="photo-atelier" id="photo-atelier">
+      <img
+        src="https://pub-b9b2e197a08243b4b99b5aa60909464c.r2.dev/photo-atelier.jpg"
+        alt="Présentation du projet pendant l’atelier"
+        width="640"
+        style="max-width: 100%; height: auto;"
+      >
+    </figure>
+    <!-- ===== PHOTO-ATELIER : fin ===== -->
+
     <section>
       <h2>Commencer ici</h2>
       <ol class="steps">

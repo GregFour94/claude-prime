@@ -100,7 +100,9 @@ describe('pages dans le navigateur', { timeout: 60000 }, () => {
       const stockage = await page.evaluate(() => ({ cookie: document.cookie, local: localStorage.length, session: sessionStorage.length }));
       assert.deepEqual(stockage, { cookie: '', local: 0, session: 0 }, nom);
     }
-    assert.deepEqual([...hotes], [new URL(serveur.adresse).host], 'seule l\'adresse du site est contactée');
+    // Seul autre domaine autorisé : la photo de l'atelier (outils.html), déclarée dans info-site.html.
+    const autorises = new Set([new URL(serveur.adresse).host, 'pub-b9b2e197a08243b4b99b5aa60909464c.r2.dev']);
+    assert.deepEqual([...hotes].filter(h => !autorises.has(h)), [], 'aucun autre domaine contacté');
     assert.deepEqual(await contexte.cookies(), []);
     assert.deepEqual(erreurs, []);
   });
