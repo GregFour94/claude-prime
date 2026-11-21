@@ -184,6 +184,21 @@
       </div>
     </section>
 
+    <section id="envoyer-message">
+      <h2>Envoyer un message</h2>
+      <form id="form-message" novalidate>
+        <div class="champ">
+          <label for="message-texte">Ton message <small>(obligatoire, 1000 caractères au maximum, réservé aux éditeurs connectés)</small></label>
+          <textarea id="message-texte" rows="4" maxlength="1000" aria-describedby="message-compteur message-etat"></textarea>
+          <small id="message-compteur"></small>
+        </div>
+        <div id="message-etat" style="margin-top: 10px;"></div>
+        <div class="dlg-actions">
+          <button type="submit" class="btn primaire" id="message-envoyer">Envoyer le message</button>
+        </div>
+      </form>
+    </section>
+
     <section class="sources">
       <h2>Sources</h2>
       <p>

@@ -272,4 +272,24 @@ describe('page outils.html dans le navigateur', { timeout: 60000 }, () => {
     assert.equal(r2.ecritures, avant);
     assert.equal(r2.lireJson(cle(A.outilId)).champs.nom, A.nom);
   });
+  it('envoyer un message : enregistré dans DATA pour un éditeur, désactivé sinon', async t => {
+    const data = new R2Memoire();
+    const r2 = r2Initialise();
+    const { page } = await ouvrir(t, { env: envProtege(r2, { DATA: data }) });
+    await page.click('#message-envoyer');
+    assert.match(await page.innerText('#message-etat'), /vide/);
+    assert.equal(await page.getAttribute('#message-texte', 'aria-invalid'), 'true');
+    await page.fill('#message-texte', 'Merci pour l\'atelier <b>!</b>');
+    await page.click('#message-envoyer');
+    await page.waitForSelector('#message-etat >> text=Message enregistré');
+    assert.equal(await page.inputValue('#message-texte'), '');
+    const cles = [...data.objets.keys()];
+    assert.equal(cles.length, 1);
+    assert.equal(data.lireJson(cles[0]).message, 'Merci pour l\'atelier <b>!</b>');
+    assert.equal(r2.ecritures, 0, 'les fiches ne sont pas touchées');
+
+    const { page: visiteur } = await ouvrir(t, { env: envProtege(r2Initialise(), { DATA: new R2Memoire() }), utilisateur: null });
+    assert.equal(await visiteur.isDisabled('#message-texte'), true);
+    assert.equal(await visiteur.isDisabled('#message-envoyer'), true);
+  });
 });

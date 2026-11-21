@@ -160,6 +160,7 @@ function render() {
   count.textContent = list.length + (list.length > 1 ? ' outils' : ' outil');
   if (!list.length) grid.append(el('p', { className: 'empty', textContent: 'Aucun outil ne correspond à ta recherche.' }));
   renderStatut();
+  majFormulaireMessage();
 }
 
 function renderStatut() {
@@ -482,6 +483,49 @@ formComm.addEventListener('submit', async e => {
 });
 
 $('comm-annuler').addEventListener('click', () => dlgComm.close());
+
+// --- Envoyer un message (bucket privé DATA, réservé aux éditeurs connectés) ---
+
+const formMessage = $('form-message'), texteMessage = $('message-texte'), etatMessage = $('message-etat');
+
+function majFormulaireMessage() {
+  $('message-compteur').textContent = `${texteMessage.value.length} / ${MAX_COMMENTAIRE} caractères`;
+  const ok = etat.session.autorise;
+  texteMessage.disabled = !ok;
+  $('message-envoyer').disabled = !ok;
+  $('message-envoyer').title = ok ? '' : etat.session.raison;
+}
+texteMessage.addEventListener('input', majFormulaireMessage);
+
+formMessage.addEventListener('submit', async e => {
+  e.preventDefault();
+  const message = texteMessage.value;
+  const probleme = validerCommentaire(message);
+  if (probleme) {
+    texteMessage.setAttribute('aria-invalid', 'true');
+    return afficherAlerte(etatMessage, `Message non envoyé : ${probleme}.`);
+  }
+  texteMessage.removeAttribute('aria-invalid');
+  const bouton = $('message-envoyer');
+  bouton.disabled = true;
+  let reponse;
+  try {
+    reponse = await appelApi('POST', '/api/admin/soumissions', { message });
+  } catch (err) {
+    bouton.disabled = false;
+    return afficherAlerte(etatMessage, 'Serveur injoignable : le message n\'a pas été enregistré.');
+  }
+  bouton.disabled = false;
+  const { status, donnees: r } = reponse;
+  if (status === 201 && r.ok) {
+    texteMessage.value = '';
+    majFormulaireMessage();
+    return afficherAlerte(etatMessage, 'Message enregistré.', true);
+  }
+  const details = status === 400 && Array.isArray(r.erreurs) ? r.erreurs.map(x => x.message).join(' · ') : '';
+  afficherAlerte(etatMessage, details ? `Message refusé : ${details}.` : messageRefus(status, r));
+  if ([0, 401, 403, 503].includes(status)) { await chargerSession(); render(); }
+});
 
 // --- Démarrage ---
 

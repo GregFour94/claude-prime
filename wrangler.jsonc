@@ -14,7 +14,9 @@
     "run_worker_first": ["/api/*"]
   },
   "r2_buckets": [
-    { "binding": "FICHES", "bucket_name": "claude-prime-outils" }
+    { "binding": "FICHES", "bucket_name": "claude-prime-outils" },
+    // Bucket privé des soumissions (juridiction UE), lu et écrit uniquement par le Worker.
+    { "binding": "DATA", "bucket_name": "formation-s4-donnees-identifiant", "jurisdiction": "eu" }
   ],
   "observability": { "enabled": true }
 }

@@ -38,7 +38,7 @@ export class R2Memoire {
     const si = options.onlyIf || {};
     if (si.etagMatches !== undefined && (!actuel || actuel.etag !== si.etagMatches)) return null;
     if (si.etagDoesNotMatch !== undefined && actuel && actuel.etag === si.etagDoesNotMatch) return null;
-    const o = { corps: String(valeur), etag: randomUUID().replace(/-/g, ''), uploaded: new Date() };
+    const o = { corps: String(valeur), etag: randomUUID().replace(/-/g, ''), uploaded: new Date(), httpMetadata: options.httpMetadata };
     this.objets.set(key, o);
     this.ecritures++;
     return { key, etag: o.etag };
@@ -65,6 +65,10 @@ export class R2Memoire {
   lireJson(key) {
     const o = this.objets.get(key);
     return o ? JSON.parse(o.corps) : null;
+  }
+
+  typeContenu(key) {
+    return this.objets.get(key)?.httpMetadata?.contentType;
   }
 
   etag(key) {

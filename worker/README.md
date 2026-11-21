@@ -34,6 +34,12 @@ Dans le bucket R2 :
 - `fiches/<outilId>.json` : **une fiche par outil** ;
 - `commentaires/<outilId>/<horodatage>-<id>.json` : **un objet par commentaire**.
 
+Dans le bucket privé `formation-s4-donnees-identifiant` (liaison `DATA`, juridiction UE), accessible
+seulement par le Worker :
+
+- `soumissions/<horodatage>-<id>.json` : **un objet par message** envoyé depuis le formulaire
+  « Envoyer un message » de `outils.html` (`message`, `creeLe`, `auteur`).
+
 ```json
 {
   "outilId": "o-d9c99e37",
@@ -66,6 +72,7 @@ Dans le bucket R2 :
 | `POST /api/admin/initialisation` | Access | Crée **uniquement** les fiches absentes. |
 | `PUT /api/admin/fiches/:outilId` | Access | Modifie une fiche (`version` obligatoire). |
 | `POST /api/admin/fiches/:outilId/commentaires` | Access | Ajoute un commentaire (1000 caractères au maximum). |
+| `POST /api/admin/soumissions` | Access | Enregistre un message (`{ "message": "…" }`, 1000 caractères au maximum) dans le bucket privé `DATA`. Répond `{ "ok": true }` seulement si l'écriture a réussi. |
 
 Pour chaque route `/api/admin/*`, le Worker vérifie :
 

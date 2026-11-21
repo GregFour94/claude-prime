@@ -8,11 +8,15 @@
 //   POST /api/admin/initialisation                crée les fiches manquantes (n'écrase jamais)
 //   PUT  /api/admin/fiches/:outilId               modifie une fiche (version attendue obligatoire)
 //   POST /api/admin/fiches/:outilId/commentaires  ajoute un commentaire
+//   POST /api/admin/soumissions                   enregistre un message dans le bucket privé DATA
 //
 // Stockage R2 (liaison FICHES) :
 //   fiches/<outilId>.json                          une fiche JSON par outil
 //   commentaires/<outilId>/<horodatage>-<id>.json  un objet par commentaire
 // Les commentaires sont rangés par outilId : changer le nom ou l'URL d'un outil ne les touche pas.
+//
+// Stockage R2 privé (liaison DATA, juridiction UE) :
+//   soumissions/<horodatage>-<id>.json             un objet par message envoyé
 
 import { CATEGORIES, OUTILS_INITIAUX } from '../../outils-data.js';
 import { ID_OUTIL, validerFiche, validerCommentaire, ficheInitiale } from '../../outils-schema.js';
@@ -21,6 +25,7 @@ import { verifierAcces, protectionManquante } from './acces.js';
 const MAX_CORPS = 32 * 1024;
 const PREFIXE_FICHES = 'fiches/';
 const PREFIXE_COMMENTAIRES = 'commentaires/';
+const PREFIXE_SOUMISSIONS = 'soumissions/';
 const CATEGORIES_VALIDES = Object.keys(CATEGORIES);
 
 const cleFiche = id => `${PREFIXE_FICHES}${id}.json`;
@@ -198,6 +203,25 @@ async function ajouterCommentaire(request, env, id, email) {
   return json({ commentaire: commentairePublic(commentaire) }, 201);
 }
 
+// Un message libre, mêmes règles qu'un commentaire (texte non vide, 1000 caractères au maximum).
+async function enregistrerSoumission(request, env, email) {
+  if (!env.DATA) return erreur(503, 'stockage_absent', 'Le bucket des soumissions (liaison DATA) n\'est pas relié au Worker.');
+  const { corps, erreur: e } = await lireCorpsJson(request);
+  if (e) return e;
+  const message = validerCommentaire(corps.message);
+  if (message) return erreur(400, 'invalide', 'Soumission invalide.', { erreurs: [{ champ: 'message', message }] });
+
+  const instant = horodatage();
+  const soumission = { soumissionId: crypto.randomUUID(), message: corps.message, creeLe: new Date(instant).toISOString(), auteur: email };
+  const cle = `${PREFIXE_SOUMISSIONS}${String(instant).padStart(15, '0')}-${soumission.soumissionId}.json`;
+  // Écriture seulement après les contrôles ci-dessus. Si elle échoue, put lève une erreur :
+  // le try/catch de fetch répond 500, jamais « OK ».
+  await env.DATA.put(cle, JSON.stringify(soumission), {
+    httpMetadata: { contentType: 'application/json' }
+  });
+  return json({ ok: true, soumissionId: soumission.soumissionId, creeLe: soumission.creeLe }, 201);
+}
+
 async function routeAdmin(request, env, chemin) {
   const manque = protectionManquante(env);
   if (manque) {
@@ -224,6 +248,9 @@ async function routeAdmin(request, env, chemin) {
   }
   if (chemin === '/api/admin/initialisation' && request.method === 'POST') {
     return initialiser(env);
+  }
+  if (chemin === '/api/admin/soumissions') {
+    return request.method === 'POST' ? enregistrerSoumission(request, env, acces.email) : erreur(405, 'methode', 'Méthode non autorisée.');
   }
   const m = chemin.match(/^\/api\/admin\/fiches\/([^/]+)(\/commentaires)?$/);
   if (m) {

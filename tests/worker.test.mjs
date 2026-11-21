@@ -457,3 +457,69 @@ describe('lecture publique et routes', () => {
     assert.ok(acces.appelsCles() < 10, `appels: ${acces.appelsCles()}`);
   });
 });
+
+describe('soumissions dans le bucket privé DATA', () => {
+  const chemin = '/api/admin/soumissions';
+  const contexte = () => {
+    const fiches = new R2Memoire(), data = new R2Memoire();
+    return { fiches, data, env: envProtege(fiches, { DATA: data }) };
+  };
+
+  it('message valide : un objet JSON écrit dans DATA, réponse « OK », FICHES non touché', async () => {
+    const { fiches, data, env } = contexte();
+    const r = await appel(env, 'POST', chemin, { jeton: await acces.jeton(), corps: { message: 'Bonjour,\nvoici mon retour.' } });
+    assert.equal(r.status, 201);
+    assert.equal(r.donnees.ok, true);
+    const cles = [...data.objets.keys()];
+    assert.equal(cles.length, 1);
+    assert.match(cles[0], /^soumissions\/\d{15}-[0-9a-f-]{36}\.json$/);
+    assert.deepEqual(data.lireJson(cles[0]), {
+      soumissionId: r.donnees.soumissionId, message: 'Bonjour,\nvoici mon retour.', creeLe: r.donnees.creeLe, auteur: EDITEUR
+    });
+    assert.equal(data.typeContenu(cles[0]), 'application/json');
+    assert.equal(fiches.ecritures, 0);
+  });
+
+  it('message invalide : refusé, rien n\'est écrit', async () => {
+    const { data, env } = contexte();
+    const jeton = await acces.jeton();
+    for (const corps of [{}, { message: '' }, { message: '   ' }, { message: 'm'.repeat(1001) }, { message: 42 }, { message: 'a\u0000b' }]) {
+      const r = await appel(env, 'POST', chemin, { jeton, corps });
+      assert.equal(r.status, 400, JSON.stringify(corps).slice(0, 30));
+    }
+    assert.equal((await appel(env, 'POST', chemin, { jeton, corps: 'pas du json' })).status, 400);
+    assert.equal(data.ecritures, 0);
+  });
+
+  it('accès non autorisé : refusé, rien n\'est écrit', async () => {
+    const { data, env } = contexte();
+    const corps = { message: 'Tentative' };
+    assert.equal((await appel(env, 'POST', chemin, { corps })).status, 401);
+    assert.equal((await appel(env, 'POST', chemin, { jeton: await acces.jeton({ email: AUTRE_PERSONNE }), corps })).status, 403);
+    assert.equal((await appel(env, 'POST', chemin, { jeton: await acces.jeton(), corps, origine: 'https://site-pirate.example' })).status, 403);
+    assert.equal((await appel(env, 'GET', chemin, { jeton: await acces.jeton() })).status, 405);
+    assert.equal((await appel(envProtege(new R2Memoire(), { DATA: data, EDITEURS: '' }), 'POST', chemin, { jeton: await acces.jeton(), corps })).status, 503);
+    assert.equal(data.ecritures, 0);
+  });
+
+  it('pas de liaison DATA : 503, aucun « OK »', async () => {
+    const r = await appel(envProtege(new R2Memoire()), 'POST', chemin, { jeton: await acces.jeton(), corps: { message: 'x' } });
+    assert.equal(r.status, 503);
+    assert.equal(r.donnees.code, 'stockage_absent');
+  });
+
+  it('écriture en échec : 500, jamais « OK »', async () => {
+    const { data, env } = contexte();
+    data.avantPut = async () => { throw new Error('R2 indisponible'); };
+    const erreurConsole = console.error;
+    console.error = () => {};
+    try {
+      const r = await appel(env, 'POST', chemin, { jeton: await acces.jeton(), corps: { message: 'Bonjour' } });
+      assert.equal(r.status, 500);
+      assert.notEqual(r.donnees.ok, true);
+    } finally {
+      console.error = erreurConsole;
+    }
+    assert.equal(data.objets.size, 0);
+  });
+});
