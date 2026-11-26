@@ -15,7 +15,8 @@ const LIENS_ATTENDUS = [
   ['Accessibilité : non conforme', 'accessibilite.html'],
   ['Site de Grégoire F.', 'index.html'],
   ['Cookies / Données personnelles', 'donnees-personnelles.html'],
-  ['Mentions légales', 'mentions-legales.html']
+  ['Mentions légales', 'mentions-legales.html'],
+  ['Crédits et propriété intellectuelle', 'credit.html']
 ];
 const lire = nom => readFile(new URL('../' + nom, import.meta.url), 'utf8');
 const piedDe = html => {
@@ -36,7 +37,7 @@ describe('pied de page commun (fichiers)', () => {
     assert.equal(new Set(pieds).size, 1, 'pied de page identique sur toutes les pages');
   });
 
-  it('nav « Pied de page » avec les 7 liens demandés, dans l\'ordre, vers des pages existantes', async () => {
+  it('nav « Pied de page » avec les 8 liens demandés, dans l\'ordre, vers des pages existantes', async () => {
     const pied = piedDe(await lire('index.html'))[0];
     assert.match(pied, /<nav aria-label="Pied de page">/);
     const liens = [...pied.matchAll(/<a href="([^"]+)">([^<]+)<\/a>/g)].map(m => [m[2], m[1]]);
@@ -190,7 +191,7 @@ describe('pages dans le navigateur', { timeout: 60000 }, () => {
       await page.goto(`${serveur.adresse}/${nom}`);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `${nom} : pas de défilement horizontal`);
       const nav = page.getByRole('navigation', { name: 'Pied de page' });
-      assert.equal(await nav.getByRole('link').count(), 7, nom);
+      assert.equal(await nav.getByRole('link').count(), 8, nom);
     }
     for (const [texte, cible] of LIENS_ATTENDUS) {
       await page.goto(`${serveur.adresse}/outils.html`);
