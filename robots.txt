@@ -1,0 +1,30 @@
+# robots.txt – Claude Prime
+# L'auteur s'oppose à la fouille de textes et de données des textes de ce site à des
+# fins commerciales, notamment pour entraîner des systèmes d'intelligence artificielle
+# (article L. 122-5-3 du Code de la propriété intellectuelle). Voir credit.html.
+#
+# Robots d'entraînement et de collecte pour l'IA : refusés.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: meta-externalagent
+User-agent: FacebookBot
+User-agent: Bytespider
+User-agent: Amazonbot
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: Diffbot
+User-agent: AI2Bot
+User-agent: Omgilibot
+User-agent: Timpibot
+User-agent: ImagesiftBot
+User-agent: PerplexityBot
+User-agent: YouBot
+Disallow: /
+
+# Moteurs de recherche classiques et autres robots : autorisés, sauf l'API.
+User-agent: *
+Disallow: /api/

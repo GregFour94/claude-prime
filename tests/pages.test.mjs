@@ -63,6 +63,20 @@ describe('pied de page commun (fichiers)', () => {
     }
   });
 
+  it('robots.txt : robots d\'IA refusés, moteurs de recherche autorisés hors /api/', async () => {
+    const groupes = (await lire('robots.txt')).split(/\n\s*\n/).map(g => g.split('\n').filter(l => l && !l.startsWith('#')));
+    const regles = groupes.filter(g => g.length).map(g => ({
+      agents: g.filter(l => l.startsWith('User-agent:')).map(l => l.slice(11).trim()),
+      refus: g.filter(l => l.startsWith('Disallow:')).map(l => l.slice(9).trim())
+    }));
+    const ia = regles.find(r => r.agents.includes('GPTBot'));
+    for (const robot of ['GPTBot', 'ClaudeBot', 'Google-Extended', 'CCBot', 'Applebot-Extended']) assert.ok(ia.agents.includes(robot), robot);
+    assert.deepEqual(ia.refus, ['/']);
+    const tous = regles.find(r => r.agents.includes('*'));
+    assert.deepEqual(tous.refus, ['/api/'], 'Googlebot, Bingbot… gardent l\'accès aux pages');
+    assert.ok(!ia.agents.some(a => /^(Googlebot|Bingbot)$/i.test(a)));
+  });
+
   it('aucun traceur ni stockage navigateur dans le code du site', async () => {
     // Code seulement : fichiers JS et blocs <script> des pages (le texte des pages peut citer ces mots).
     const codes = [];
